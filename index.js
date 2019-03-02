@@ -54,12 +54,12 @@ app.post("/move", (request, response) => {
     // NOTE: Do something here to generate your move
     const state = request.body;
 
-    console.log(JSON.stringify(state.board));
+    //console.log(JSON.stringify(state.board));
     // Response data
     const data = {
       move: findMoveFoodMode(state)
     };
-    console.log(pathing.gernerateMatrix(state.board));
+    //console.log(pathing.gernerateMatrix(state.board));
 
     return response.json(data);
   } catch (e) {

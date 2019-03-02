@@ -21,18 +21,18 @@ const getPath = (state, snake, destination) => {
   console.log(
     `snake is ${JSON.stringify(snake)} and destination is ${JSON.stringify(
       destination
-    )} snake body x is ${snake.body[0].x}`
+    )}`
   );
-  console.log(`snake body  y is ${snake.body[0].y}`);
-  console.log(`destination x is ${destination.x}`);
-  console.log(`destination y is ${destination.y}`);
-  var path = finder.findPath(
-    snake.body[0].x,
-    snake.body[0].y,
-    destination.x,
-    destination.x,
-    grid
-  );
+  var path =
+    snake.body.length > 0
+      ? finder.findPath(
+          snake.body[0].x,
+          snake.body[0].y,
+          destination.x,
+          destination.x,
+          grid
+        )
+      : [];
 
   path.shift();
   console.log(path);
@@ -66,7 +66,7 @@ function addblocks(matrix, state) {
 //add the snake itself other than the head
 function addItself(matrix, state) {
   var bodySnake = state.you.body;
-  bodySnake.shift();
+  //bodySnake.shift();
   //console.log(bodySnake);
   for (var xy in bodySnake) {
     turnZeroToOne(matrix, xy);
@@ -75,8 +75,8 @@ function addItself(matrix, state) {
 }
 
 function turnZeroToOne(matrix, xy) {
-  x = xy.x;
-  y = xy.y;
+  const x = xy.x;
+  const y = xy.y;
   matrix[x][y] = 1;
 }
 
