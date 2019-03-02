@@ -18,8 +18,12 @@ const getPath = (state, snake, destination) => {
 
   var grid = new PF.Grid(matrix);
   var finder = new PF.AStarFinder();
-  var path = finder.findPath(0, 0, 1, 0, grid);
-  path = path.splice(0, 1);
+  // console.log(`snake body x is ${snake.body[0].x}`);
+  // console.log(`snake body  y is ${snake.body[0].y}`);
+  // console.log(`destination x is ${destination.x}`);
+  // console.log(`destination y is ${destination.y}`);
+  var path = finder.findPath(1, 2, 3, 4, grid);
+  path.shift();
   //const matrix = gernerateMatrix(state.body.board);
 
   return path;
@@ -27,10 +31,10 @@ const getPath = (state, snake, destination) => {
 
 // generate a matrix with
 function gernerateMatrix(board) {
-  var x = new Array(board.height);
+  var matrix = new Array(board.height);
   for (var i = 0; i < board.height; i++) {
-    x[i] = new Array(board.width);
-    x[i].fill(0);
+    matrix[i] = new Array(board.width);
+    matrix[i].fill(0);
   }
 
   return matrix;
@@ -39,20 +43,22 @@ function gernerateMatrix(board) {
 // returns a matrix with other snakes as walls
 function addblocks(matrix, state) {
   //add the body of itself as block
+  //console.log("beforeiteself");
   var matrixAfterItself = addItself(matrix, state);
+  //console.log("beforeother");
   var matrixAfterOtherSanke = addOtherSnake(matrixAfterItself, state);
+  //console.log("afterother");
   return matrixAfterOtherSanke;
 }
 
 //add the snake itself other than the head
 function addItself(matrix, state) {
   var bodySnake = state.body.you.body;
-  var removeHead = bodySnake.splice(0, 1);
-
-  for (var xy in removeHead) {
+  bodySnake.shift();
+  //console.log(bodySnake);
+  for (var xy in bodySnake) {
     turnZeroToOne(matrix, xy);
   }
-
   return matrix;
 }
 
@@ -74,5 +80,10 @@ function addOtherSnake(matrix, state) {
 }
 
 module.exports = {
-  getPath
+  getPath,
+  gernerateMatrix,
+  turnZeroToOne,
+  addItself,
+  addblocks,
+  addOtherSnake
 };
