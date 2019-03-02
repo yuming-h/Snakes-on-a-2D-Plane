@@ -48,6 +48,19 @@ app.post('/move', (request, response) => {
 })
 
 /**
+ * Returns if the given path will be first to the destination
+ * (Checks all other snake's paths to the destination and sees if they are valid)
+ * Might want to be a bit conservative and only say we have the best path if we are at least 2 or 3 moves ahead
+ * since we won't have time to optimize.
+ * @param {*} state 
+ * @param pathLength - The length of the path to check against.
+ * @param {x:n, y:m} destination - The destination square
+ */
+const isFirst = (state, pathLength, destination) => {
+
+}
+
+/**
  * Returns an array of coordinates [{x:n, y:m},...] representing a path to destination.
  * @param {*} state Unaltered game state
  * @param {*} snake The snake object to find the path for
