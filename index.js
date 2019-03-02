@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const logger = require('morgan')
+const path = require('getPath')
 const app = express()
 const {
   fallbackHandler,
@@ -60,15 +61,6 @@ const isFirst = (state, pathLength, destination) => {
 
 }
 
-/**
- * Returns an array of coordinates [{x:n, y:m},...] representing a path to destination.
- * @param {*} state Unaltered game state
- * @param {*} snake The snake object to find the path for
- * @param {x:n, y:m} destination The desired destination
- */
-const getPath = (state, snake, destination) => {
-
-}
 
 /**
  * Returns if a path is traversable without dying to a snake currently in the way.

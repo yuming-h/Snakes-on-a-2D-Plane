@@ -1,0 +1,13 @@
+/**
+ * Returns an array of coordinates [{x:n, y:m},...] representing a path to destination.
+ * @param {*} state Unaltered game state
+ * @param {*} snake The snake object to find the path for
+ * @param {x:n, y:m} destination The desired destination
+ */
+const getPath = (state, snake, destination) => {
+
+}
+
+module.exports = {
+    getPath
+}
