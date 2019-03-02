@@ -5,9 +5,22 @@
  * @param {x:n, y:m} destination The desired destination
  */
 const getPath = (state, snake, destination) => {
-
+    const matrix = gernerateMatrix(state.body.);
 }
 
 module.exports = {
     getPath
+}
+
+// generate a matrix with
+function gernerateMatrix(board) {
+
+    return matrix;
+}
+
+
+// returns a matrix with other snakes as walls
+function addblocks(otherSnake) {
+
+    return matrix;
 }
