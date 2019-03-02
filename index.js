@@ -58,7 +58,8 @@ app.post("/move", (request, response) => {
     move: findMoveFoodMode(state)
   };
 
-  var matrix = path.gernerateMatrix(request.body.board);
+  var matrix = path.gernerateMatrix(state);
+  console.log(matrix);
   //path.turnZeroToOne(matrix, request.body.you.body[0]);
 
   // console.log(
@@ -69,7 +70,7 @@ app.post("/move", (request, response) => {
   //   )
   // );
 
-  //  console.log(path.getPath(request));
+  //  console.log(path.getPath(state));
   return response.json(data);
 });
 

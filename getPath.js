@@ -13,7 +13,7 @@ const getPath = (state, snake, destination) => {
   //   [1, 1, 1, 1, 1],
   //   [1, 1, 1, 1, 1]
   // ];
-  var matrix = gernerateMatrix(state.body.board);
+  var matrix = gernerateMatrix(state.board);
   matrix = addblocks(matrix, state);
 
   var grid = new PF.Grid(matrix);
@@ -53,7 +53,7 @@ function addblocks(matrix, state) {
 
 //add the snake itself other than the head
 function addItself(matrix, state) {
-  var bodySnake = state.body.you.body;
+  var bodySnake = state.you.body;
   bodySnake.shift();
   //console.log(bodySnake);
   for (var xy in bodySnake) {
@@ -69,7 +69,7 @@ function turnZeroToOne(matrix, xy) {
 }
 
 function addOtherSnake(matrix, state) {
-  var snakes = state.body.board.snakes;
+  var snakes = state.board.snakes;
   for (var snake in snakes) {
     var snakeBody = snake.body;
     for (xy in snakeBody) {
