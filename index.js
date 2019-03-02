@@ -1,7 +1,8 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const logger = require("morgan");
-const path = require("./getPath");
+const pathing = require("./getPath");
+const helpers = require("./helper");
 const app = express();
 const {
   fallbackHandler,
@@ -12,6 +13,7 @@ const {
 var board = require('./board')
 
 
+const STARVING = 25;
 // For deployment to Heroku, the port needs to be set using ENV, so
 // we check for the port number in process.env
 app.set("port", process.env.PORT || 9001);
@@ -43,17 +45,82 @@ app.post("/start", (request, response) => {
 
 // Handle POST request to '/move'
 app.post("/move", (request, response) => {
-  // NOTE: Do something here to generate your move
-  const state = request.body;
-  boardState = board.updateBoard(state)
-  
-  // Response data
-  const data = {
-    move: "up" // one of: ['up','down','left','right']
-  };
+  try {
+    // NOTE: Do something here to generate your move
+    const state = request.body;
 
-  return response.json(data);
+    //console.log(JSON.stringify(state.board));
+    // Response data
+    const data = {
+      move: findMoveFoodMode(state)
+    };
+    //console.log(pathing.gernerateMatrix(state.board));
+
+    return response.json(data);
+  } catch (e) {
+    return response.json({ error: e.toString(), stack: e.stack });
+  }
 });
+
+/**
+ * Given our snake and a path to take return the first move to take (this move)
+ * @param {*} ourSnake
+ * @param {*} path
+ */
+const translateMove = (ourSnake, path) => {
+  const ourHead = ourSnake.body.shift;
+  const coordinateToMoveTo = path.shift;
+  if (ourHead.x !== coordinateToMoveTo.x) {
+    if (coordinateToMoveTo.x > ourHead.x) {
+      return "right";
+    }
+    return "left";
+  } else {
+    if (coordinateToMoveTo.y > ourHead.y) {
+      return "down";
+    }
+    return "up";
+  }
+};
+
+/**
+ * The master function to return a move.
+ * @param {*} state
+ */
+const findMoveFoodMode = state => {
+  //Get all paths to food
+  const pathList = state.board.food.map(food => {
+    console.log(
+      `food is ${JSON.stringify(food)} and state.you is ${JSON.stringify(
+        state.you
+      )}`
+    );
+    return pathing.getPath(state, state.you, food);
+  });
+  //Sort by shortest length so we can find good short paths first
+  pathList.sort(path => {
+    return path.length !== 0 ? path.length : Number.MAX_VALUE;
+  });
+  //Finds the shortest path that we are first to otherwise ends up undefined
+  const maybeGoodPath = pathList.find(path => {
+    return isFirst(
+      state,
+      path.length,
+      helpers.coordinateToObject(path[path.length - 1])
+    );
+  });
+  //Go for any food that we can be first to
+  if (maybeGoodPath !== undefined) {
+    return translateMove(state.you, maybeGoodPath);
+  }
+  //Go for the food with the shortest path if we are starving
+  if (state.you.health < STARVING) {
+    if (pathList[0].length > 0) {
+      return translateMove(state.you, pathList[0]);
+    }
+  }
+  //Otherwise chill (defensive mode) TODO
+};
 
 /**
  * Returns if the given path will be first to the destination
@@ -67,7 +134,7 @@ app.post("/move", (request, response) => {
 const isFirst = (state, pathLength, destination) => {
   const otherSnakes = state.board.snakes;
   const otherPathLengths = otherSnakes.map(snek => {
-    const foundPath = getPath(state, snek, destination);
+    const foundPath = pathing.getPath(state, snek, destination);
     if (!foundPath) {
       return Number.MAX_VALUE;
     }
@@ -75,7 +142,7 @@ const isFirst = (state, pathLength, destination) => {
   });
 
   otherPathLengths.forEach(len => {
-    if (len <= pathLength + 1) return false;
+    if (len <= pathLength) return false;
   });
   return true;
 };

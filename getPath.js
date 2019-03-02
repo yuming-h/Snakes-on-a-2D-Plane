@@ -13,13 +13,29 @@ const getPath = (state, snake, destination) => {
   //   [1, 1, 1, 1, 1],
   //   [1, 1, 1, 1, 1]
   // ];
-  var matrix = gernerateMatrix(state.body.board);
+  var matrix = gernerateMatrix(state.board);
   matrix = addblocks(matrix, state);
 
   var grid = new PF.Grid(matrix);
   var finder = new PF.AStarFinder();
-  var path = finder.findPath(0, 0, 1, 0, grid);
-  path = path.splice(0, 1);
+  console.log(
+    `snake is ${JSON.stringify(snake)} and destination is ${JSON.stringify(
+      destination
+    )}`
+  );
+  var path =
+    snake.body.length > 0
+      ? finder.findPath(
+          snake.body[0].x,
+          snake.body[0].y,
+          destination.x,
+          destination.x,
+          grid
+        )
+      : [];
+
+  path.shift();
+  console.log(path);
   //const matrix = gernerateMatrix(state.body.board);
 
   return path;
@@ -27,10 +43,10 @@ const getPath = (state, snake, destination) => {
 
 // generate a matrix with
 function gernerateMatrix(board) {
-  var x = new Array(board.height);
+  var matrix = new Array(board.height);
   for (var i = 0; i < board.height; i++) {
-    x[i] = new Array(board.width);
-    x[i].fill(0);
+    matrix[i] = new Array(board.width);
+    matrix[i].fill(0);
   }
 
   return matrix;
@@ -39,31 +55,33 @@ function gernerateMatrix(board) {
 // returns a matrix with other snakes as walls
 function addblocks(matrix, state) {
   //add the body of itself as block
+  //console.log("beforeiteself");
   var matrixAfterItself = addItself(matrix, state);
+  //console.log("beforeother");
   var matrixAfterOtherSanke = addOtherSnake(matrixAfterItself, state);
+  //console.log("afterother");
   return matrixAfterOtherSanke;
 }
 
 //add the snake itself other than the head
 function addItself(matrix, state) {
-  var bodySnake = state.body.you.body;
-  var removeHead = bodySnake.splice(0, 1);
-
-  for (var xy in removeHead) {
+  var bodySnake = state.you.body;
+  //bodySnake.shift();
+  //console.log(bodySnake);
+  for (var xy in bodySnake) {
     turnZeroToOne(matrix, xy);
   }
-
   return matrix;
 }
 
 function turnZeroToOne(matrix, xy) {
-  x = xy.x;
-  y = xy.y;
+  const x = xy.x;
+  const y = xy.y;
   matrix[x][y] = 1;
 }
 
 function addOtherSnake(matrix, state) {
-  var snakes = state.body.board.snakes;
+  var snakes = state.board.snakes;
   for (var snake in snakes) {
     var snakeBody = snake.body;
     for (xy in snakeBody) {
@@ -74,5 +92,10 @@ function addOtherSnake(matrix, state) {
 }
 
 module.exports = {
-  getPath
+  getPath,
+  gernerateMatrix,
+  turnZeroToOne,
+  addItself,
+  addblocks,
+  addOtherSnake
 };
