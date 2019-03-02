@@ -51,18 +51,18 @@ app.post("/start", (request, response) => {
 // Handle POST request to '/move'
 app.post("/move", (request, response) => {
   try {
-  // NOTE: Do something here to generate your move
-  const state = request.body
+    // NOTE: Do something here to generate your move
+    const state = request.body
 
-  console.log(JSON.stringify(state))
-  // Response data
-  const data = {
-    move: findMoveFoodMode(state)
-  }
-  return response.json(data);
+    console.log(JSON.stringify(state))
+    // Response data
+    const data = {
+      move: findMoveFoodMode(state)
+    }
+    return response.json(data);
   }
   catch(e) {
-  return response.json({error: e.toString(), stack: e.stack})
+    return response.json({error: e.toString(), stack: e.stack})
   }
 });
 
