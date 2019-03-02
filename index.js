@@ -9,7 +9,14 @@ const {
   notFoundHandler,
   genericErrorHandler,
   poweredByHandler
-} = require("./handlers.js");
+} = require('./handlers.js')
+const board = require('./board')
+
+var boardState
+var me = {
+  x: null,
+  y: null
+}
 
 const STARVING = 25
 // For deployment to Heroku, the port needs to be set using ENV, so
@@ -26,8 +33,9 @@ app.use(poweredByHandler);
 
 // Handle POST request to '/start'
 app.post("/start", (request, response) => {
-  // NOTE: Do something here to start the game
-  boardState = board.initializeBoard(request.body.board)
+  try {
+  boardState = board.initializeBoard(request.body)
+  me = request.body.you.body[0]
   // Response data
   const data = {
     color: "#DFFF00",
@@ -35,6 +43,9 @@ app.post("/start", (request, response) => {
     tailType: "bolt"
   };
   return response.json(data);
+} catch (e) {
+  return response.json({error: e.toString()})
+}
 });
 
 // Handle POST request to '/move'
@@ -161,5 +172,4 @@ app.use(genericErrorHandler);
 
 app.listen(app.get("port"), () => {
   console.log("Server listening on port %s", app.get("port"));
-  console.log(path.getPath());
 });
