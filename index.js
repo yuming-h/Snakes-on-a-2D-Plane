@@ -68,15 +68,16 @@ app.post("/move", (request, response) => {
  * @param {*} path
  */
 const translateMove = (ourSnake, path) => {
-  const ourHead = ourSnake.body.shift;
-  const coordinateToMoveTo = path.shift;
-  if (ourHead.x !== coordinateToMoveTo.x) {
-    if (coordinateToMoveTo.x > ourHead.x) {
+  console.log(JSON.stringify(path))
+  const ourHead = ourSnake.body.shift();
+  const coordinateToMoveTo = path.shift();
+  if (ourHead.x !== coordinateToMoveTo[0]) {
+    if (coordinateToMoveTo[0] > ourHead.x) {
       return "right";
     }
     return "left";
   } else {
-    if (coordinateToMoveTo.y > ourHead.y) {
+    if (coordinateToMoveTo[1] > ourHead.y) {
       return "down";
     }
     return "up";

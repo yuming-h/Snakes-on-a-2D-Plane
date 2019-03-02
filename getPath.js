@@ -29,13 +29,13 @@ const getPath = (state, snake, destination) => {
           snake.body[0].x,
           snake.body[0].y,
           destination.x,
-          destination.x,
+          destination.y,
           grid
         )
       : [];
 
   path.shift();
-  console.log(path);
+  //console.log(path);
   //const matrix = gernerateMatrix(state.body.board);
 
   return path;
@@ -84,7 +84,7 @@ function addOtherSnake(matrix, state) {
   var snakes = state.board.snakes;
   snakes.forEach(snake => {
     var snakeBody = snake.body;
-    snakebody.forEach(xy => {
+    snakeBody.forEach(xy => {
       turnZeroToOne(matrix, xy);
     });
   });
