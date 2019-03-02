@@ -24,9 +24,9 @@ const getPath = (state, snake, destination) => {
 
 // generate a matrix with
 function gernerateMatrix(board) {
-  var x = new Array(board.width);
-  for (var i = 0; i < board.width; i++) {
-    x[i] = new Array(board.height);
+  var x = new Array(board.height);
+  for (var i = 0; i < board.height; i++) {
+    x[i] = new Array(board.width);
     x[i].fill(0);
   }
 
@@ -42,12 +42,20 @@ function addblocks(matrix, state) {
 
 //add the snake itself other than the head
 function addItself(matrix, state) {
-  var bodySnake = state.you.body;
+  var bodySnake = state.body.you.body;
   var removeHead = bodySnake.splice(0, 1);
-  removeHead.forEach(turnZeroToOne(matrix, state));
+
+  for(var xy in removeHead){
+      turnZeroToOne(matrix, xy);
+  }
+
 }
 
-function turnZeroToOne(matrix, state) {}
+function turnZeroToOne(matrix, xy) {
+    x = xy.x;
+    y = xy.y;
+    matrix[x][y] = 1;
+}
 
 module.exports = {
   getPath
