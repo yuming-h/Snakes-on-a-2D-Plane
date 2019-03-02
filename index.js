@@ -58,7 +58,20 @@ app.post('/move', (request, response) => {
  * @param {x:n, y:m} destination - The destination square
  */
 const isFirst = (state, pathLength, destination) => {
+  const otherSnakes = state.board.snakes
+  const otherPathLengths = otherSnakes.map(snek => {
+    const foundPath = getPath(state, snek, destination)
+    if(!foundPath) {
+      return Number.MAX_VALUE
+    }
+    return foundPath.length
+  })
 
+  otherPathLengths.forEach(len => {
+      if (len <= (pathLength + 1)) return false
+    }
+  )
+  return true
 }
 
 
