@@ -68,9 +68,9 @@ function addItself(matrix, state) {
   var bodySnake = state.you.body;
   //bodySnake.shift();
   //console.log(bodySnake);
-  for (var xy in bodySnake) {
+  bodySnake.forEach(xy => {
     turnZeroToOne(matrix, xy);
-  }
+  })
   return matrix;
 }
 
