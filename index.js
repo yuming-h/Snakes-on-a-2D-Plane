@@ -1,7 +1,8 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const logger = require("morgan");
-const path = require("./getPath");
+const getPath = require("./getPath");
+const helpers = require("./helper")
 const app = express();
 const {
   fallbackHandler,
@@ -10,6 +11,7 @@ const {
   poweredByHandler
 } = require("./handlers.js");
 
+const STARVING = 25
 // For deployment to Heroku, the port needs to be set using ENV, so
 // we check for the port number in process.env
 app.set("port", process.env.PORT || 9001);
@@ -42,11 +44,63 @@ app.post("/move", (request, response) => {
 
   // Response data
   const data = {
-    move: "up" // one of: ['up','down','left','right']
+    move: findMoveFoodMode(state)
   };
 
   return response.json(data);
 });
+
+/**
+ * Given our snake and a path to take return the first move to take (this move)
+ * @param {*} ourSnake
+ * @param {*} path
+ */
+const translateMove = (ourSnake, path) => {
+  const ourHead = ourSnake.body.shift
+  const coordinateToMoveTo = path.shift
+  if (ourHead.x !== coordinateToMoveTo.x) {
+    if (coordinateToMoveTo.x > ourHead.x) {
+      return 'right'
+    }
+    return 'left'
+  }
+  else {
+    if(coordinateToMoveTo.y > ourHead.y) {
+      return 'down'
+    }
+    return 'up'
+  }
+}
+
+/**
+ * The master function to return a move.
+ * @param {*} state
+ */
+const findMoveFoodMode = (state) => {
+  //Get all paths to food
+  const pathList = state.board.food.map(food => {
+    return getPath(state, state.you, food)
+  })
+  //Sort by shortest length so we can find good short paths first
+  pathList.sort(path => {
+    return (path.length !== 0) ? path.length : Number.MAX_VALUE
+  })
+  //Finds the shortest path that we are first to otherwise ends up undefined
+  const maybeGoodPath = pathList.find(path => {
+    return isFirst(state, path.length, helpers.coordinateToObject(path[path.length-1]))
+  })
+  //Go for any food that we can be first to
+  if (maybeGoodPath !== undefined) {
+    return translateMove(state.you, maybeGoodPath)
+  }
+  //Go for the food with the shortest path if we are starving
+  if(state.you.health < STARVING) {
+    if (pathList[0].length > 0) {
+      return translateMove(state.you, pathList[0])
+    }
+  }
+  //Otherwise chill (defensive mode) TODO
+}
 
 /**
  * Returns if the given path will be first to the destination
@@ -68,7 +122,7 @@ const isFirst = (state, pathLength, destination) => {
   });
 
   otherPathLengths.forEach(len => {
-    if (len <= pathLength + 1) return false;
+    if (len <= pathLength) return false;
   });
   return true;
 };
