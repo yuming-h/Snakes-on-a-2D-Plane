@@ -10,7 +10,7 @@ const {
 } = require('./handlers.js')
 const board = require('./board')
 
-let boardState = []
+let boardState = [[]]
 
 // For deployment to Heroku, the port needs to be set using ENV, so
 // we check for the port number in process.env
@@ -27,7 +27,7 @@ app.use(poweredByHandler)
 // Handle POST request to '/start'
 app.post('/start', (request, response) => {
   // NOTE: Do something here to start the game
-  boardState = board.initializeBoard(request.body)
+  boardState = board.initializeBoard(request.body.board)
   // Response data
   const data = {
     color: '#DFFF00',
@@ -50,6 +50,31 @@ app.post('/move', (request, response) => {
   return response.json(data)
 })
 
+/**
+ * Returns if the given path will be first to the destination
+ * (Checks all other snake's paths to the destination and sees if they are valid)
+ * Might want to be a bit conservative and only say we have the best path if we are at least 2 or 3 moves ahead
+ * since we won't have time to optimize.
+ * @param {*} state 
+ * @param pathLength - The length of the path to check against.
+ * @param {x:n, y:m} destination - The destination square
+ */
+const isFirst = (state, pathLength, destination) => {
+  const otherSnakes = state.board.snakes
+  const otherPathLengths = otherSnakes.map(snek => {
+    const foundPath = getPath(state, snek, destination)
+    if(!foundPath) {
+      return Number.MAX_VALUE
+    }
+    return foundPath.length
+  })
+
+  otherPathLengths.forEach(len => {
+      if (len <= (pathLength + 1)) return false
+    }
+  )
+  return true
+}
 
 /**
  * Returns an array of coordinates [{x:n, y:m},...] representing a path to destination.
