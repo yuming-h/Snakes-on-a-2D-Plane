@@ -1,8 +1,8 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const logger = require("morgan");
-const getPath = require("./getPath");
-const helpers = require("./helper");
+const pathing = require("./getPath");
+const helpers = require("./helper")
 const app = express();
 const {
   fallbackHandler,
@@ -50,27 +50,20 @@ app.post("/start", (request, response) => {
 
 // Handle POST request to '/move'
 app.post("/move", (request, response) => {
+  try {
   // NOTE: Do something here to generate your move
-  const state = request.body;
+  const state = request.body
 
+  console.log(JSON.stringify(state))
   // Response data
   const data = {
     move: findMoveFoodMode(state)
-  };
-
-  var matrix = path.gernerateMatrix(request.body.board);
-  //path.turnZeroToOne(matrix, request.body.you.body[0]);
-
-  // console.log(
-  //   path.getPath(
-  //     request,
-  //     { body: [{ x: 0, y: 0 }, { x: 1, y: 0 }]} ,
-  //     { x: 0, y: 0 }
-  //   )
-  // );
-
-  //  console.log(path.getPath(request));
+  }
   return response.json(data);
+  }
+  catch(e) {
+  return response.json({error: e.toString(), stack: e.stack})
+  }
 });
 
 /**
@@ -101,8 +94,8 @@ const translateMove = (ourSnake, path) => {
 const findMoveFoodMode = state => {
   //Get all paths to food
   const pathList = state.board.food.map(food => {
-    return getPath(state, state.you, food);
-  });
+    return pathing.getPath(state, state.you, food)
+  })
   //Sort by shortest length so we can find good short paths first
   pathList.sort(path => {
     return path.length !== 0 ? path.length : Number.MAX_VALUE;
