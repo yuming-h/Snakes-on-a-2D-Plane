@@ -70,7 +70,7 @@ function addItself(matrix, state) {
   //console.log(bodySnake);
   bodySnake.forEach(xy => {
     turnZeroToOne(matrix, xy);
-  })
+  });
   return matrix;
 }
 
@@ -82,12 +82,12 @@ function turnZeroToOne(matrix, xy) {
 
 function addOtherSnake(matrix, state) {
   var snakes = state.board.snakes;
-  for (var snake in snakes) {
+  snakes.forEach(snake => {
     var snakeBody = snake.body;
-    for (xy in snakeBody) {
+    snakebody.forEach(xy => {
       turnZeroToOne(matrix, xy);
-    }
-  }
+    });
+  });
   return matrix;
 }
 
