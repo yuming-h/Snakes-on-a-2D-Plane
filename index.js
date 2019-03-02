@@ -2,7 +2,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const logger = require("morgan");
 const pathing = require("./getPath");
-const helpers = require("./helper")
+const helpers = require("./helper");
 const app = express();
 const {
   fallbackHandler,
@@ -51,18 +51,19 @@ app.post("/start", (request, response) => {
 // Handle POST request to '/move'
 app.post("/move", (request, response) => {
   try {
-  // NOTE: Do something here to generate your move
-  const state = request.body
+    // NOTE: Do something here to generate your move
+    const state = request.body;
 
-  console.log(JSON.stringify(state))
-  // Response data
-  const data = {
-    move: findMoveFoodMode(state)
-  }
-  return response.json(data);
-  }
-  catch(e) {
-  return response.json({error: e.toString(), stack: e.stack})
+    console.log(JSON.stringify(state.board));
+    // Response data
+    const data = {
+      move: findMoveFoodMode(state)
+    };
+    console.log(pathing.gernerateMatrix(state.board));
+
+    return response.json(data);
+  } catch (e) {
+    return response.json({ error: e.toString(), stack: e.stack });
   }
 });
 
@@ -94,8 +95,13 @@ const translateMove = (ourSnake, path) => {
 const findMoveFoodMode = state => {
   //Get all paths to food
   const pathList = state.board.food.map(food => {
-    return pathing.getPath(state, state.you, food)
-  })
+    console.log(
+      `food is ${JSON.stringify(food)} and state.you is ${JSON.stringify(
+        state.you
+      )}`
+    );
+    return pathing.getPath(state, state.you, food);
+  });
   //Sort by shortest length so we can find good short paths first
   pathList.sort(path => {
     return path.length !== 0 ? path.length : Number.MAX_VALUE;
@@ -133,7 +139,7 @@ const findMoveFoodMode = state => {
 const isFirst = (state, pathLength, destination) => {
   const otherSnakes = state.board.snakes;
   const otherPathLengths = otherSnakes.map(snek => {
-    const foundPath = getPath(state, snek, destination);
+    const foundPath = pathing.getPath(state, snek, destination);
     if (!foundPath) {
       return Number.MAX_VALUE;
     }

@@ -18,12 +18,24 @@ const getPath = (state, snake, destination) => {
 
   var grid = new PF.Grid(matrix);
   var finder = new PF.AStarFinder();
-  // console.log(`snake body x is ${snake.body[0].x}`);
-  // console.log(`snake body  y is ${snake.body[0].y}`);
-  // console.log(`destination x is ${destination.x}`);
-  // console.log(`destination y is ${destination.y}`);
-  var path = finder.findPath(1, 2, 3, 4, grid);
+  console.log(
+    `snake is ${JSON.stringify(snake)} and destination is ${JSON.stringify(
+      destination
+    )} snake body x is ${snake.body[0].x}`
+  );
+  console.log(`snake body  y is ${snake.body[0].y}`);
+  console.log(`destination x is ${destination.x}`);
+  console.log(`destination y is ${destination.y}`);
+  var path = finder.findPath(
+    snake.body[0].x,
+    snake.body[0].y,
+    destination.x,
+    destination.x,
+    grid
+  );
+
   path.shift();
+  console.log(path);
   //const matrix = gernerateMatrix(state.body.board);
 
   return path;
