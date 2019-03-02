@@ -25,7 +25,7 @@ app.use(poweredByHandler);
 // Handle POST request to '/start'
 app.post("/start", (request, response) => {
   // NOTE: Do something here to start the game
-  boardState = board.initializeBoard(request.body.board)
+  boardState = board.initializeBoard(request.body.board);
   // Response data
   const data = {
     color: "#DFFF00",
@@ -45,6 +45,18 @@ app.post("/move", (request, response) => {
     move: "up" // one of: ['up','down','left','right']
   };
 
+  var matrix = path.gernerateMatrix(request.body.board);
+  //path.turnZeroToOne(matrix, request.body.you.body[0]);
+
+  // console.log(
+  //   path.getPath(
+  //     request,
+  //     { body: [{ x: 0, y: 0 }, { x: 1, y: 0 }]} ,
+  //     { x: 0, y: 0 }
+  //   )
+  // );
+
+  //  console.log(path.getPath(request));
   return response.json(data);
 });
 
@@ -107,5 +119,4 @@ app.use(genericErrorHandler);
 
 app.listen(app.get("port"), () => {
   console.log("Server listening on port %s", app.get("port"));
-  console.log(path.getPath());
 });
