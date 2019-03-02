@@ -9,13 +9,8 @@ const {
   genericErrorHandler,
   poweredByHandler
 } = require('./handlers.js')
-const board = require('./board')
+var board = require('./board')
 
-var boardState
-var me = {
-  x: null,
-  y: null
-}
 
 // For deployment to Heroku, the port needs to be set using ENV, so
 // we check for the port number in process.env
@@ -32,15 +27,15 @@ app.use(poweredByHandler);
 // Handle POST request to '/start'
 app.post("/start", (request, response) => {
   try {
-  boardState = board.initializeBoard(request.body)
-  me = request.body.you.body[0]
+  board = new board(request.body)
   // Response data
   const data = {
     color: "#DFFF00",
     headType: "smile",
     tailType: "bolt"
   };
-  return response.json(data);
+  console.log(board.boardMatrix.toString())
+  return response.json(data)
 } catch (e) {
   return response.json({error: e.toString()})
 }
@@ -50,7 +45,8 @@ app.post("/start", (request, response) => {
 app.post("/move", (request, response) => {
   // NOTE: Do something here to generate your move
   const state = request.body;
-
+  boardState = board.updateBoard(state)
+  
   // Response data
   const data = {
     move: "up" // one of: ['up','down','left','right']
