@@ -25,7 +25,7 @@ app.use(poweredByHandler);
 // Handle POST request to '/start'
 app.post("/start", (request, response) => {
   // NOTE: Do something here to start the game
-
+  boardState = board.initializeBoard(request.body.board)
   // Response data
   const data = {
     color: "#DFFF00",
