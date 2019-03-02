@@ -28,3 +28,37 @@ const initializeBoard = (boardData) => {
 module.exports = {
     initializeBoard
 }
+
+/**
+ * Returns a 2d array of how many moves a particular coordinate will be occupied for.
+ * Used for isValidPath.
+ * @param {*} state
+ */
+function getOccupiedSquares(state){
+    const boardHeight = state.board.height;
+    const boardWidth = state.board.width;
+    const board = new Array(boardHeight).fill(0).map(() => new Array(boardWidth).fill(0));
+  
+    var snakes = state.board.snakes;
+  
+    //Encode occupied turns for opponent snakes
+    for (var i = 0; i < state.board.snakes.length; i++) {
+      var snake = snakes[i];
+      for (var coordIndex = 0; coordIndex < snake.body.length; coordIndex++) {
+        var coord = snake.body[coordIndex]
+        var occupiedTurns = snake.body.length - coordIndex;
+        board[coord.y][coord.x] = occupiedTurns;
+      }
+    }
+  
+    // Encode occupied turns for our snake
+     const you = state.you;
+    for (var coordIndex = 0; coordIndex < you.body.length; coordIndex++) {
+      var coord = you.body[coordIndex]
+      var occupiedTurns = you.body.length - coordIndex;
+      board[coord.y][coord.x] = occupiedTurns;
+    }
+    
+      console.log(JSON.stringify(board));
+    return board;
+  }
