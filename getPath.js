@@ -7,12 +7,15 @@ var PF = require("pathfinding");
  * @param {x:n, y:m} destination The desired destination
  */
 const getPath = (state, snake, destination) => {
-  var matrix = [
-    [1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1]
-  ];
+  // var matrix = [
+  //   [1, 1, 1, 1, 1],
+  //   [1, 1, 1, 1, 1],
+  //   [1, 1, 1, 1, 1],
+  //   [1, 1, 1, 1, 1]
+  // ];
+  var matrix = gernerateMatrix(state.body.board);
+  matrix = addblocks(matrix, state);
+
   var grid = new PF.Grid(matrix);
   var finder = new PF.AStarFinder();
   var path = finder.findPath(0, 0, 1, 0, grid);
@@ -46,16 +49,17 @@ function addItself(matrix, state) {
   var bodySnake = state.body.you.body;
   var removeHead = bodySnake.splice(0, 1);
 
-  for(var xy in removeHead){
-      turnZeroToOne(matrix, xy);
+  for (var xy in removeHead) {
+    turnZeroToOne(matrix, xy);
   }
 
+  return matrix;
 }
 
 function turnZeroToOne(matrix, xy) {
-    x = xy.x;
-    y = xy.y;
-    matrix[x][y] = 1;
+  x = xy.x;
+  y = xy.y;
+  matrix[x][y] = 1;
 }
 
 function addOtherSnake(matrix, state) {
@@ -66,6 +70,7 @@ function addOtherSnake(matrix, state) {
       turnZeroToOne(matrix, xy);
     }
   }
+  return matrix;
 }
 
 module.exports = {
