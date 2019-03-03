@@ -15,7 +15,7 @@ const getPath = (state, snake, destination) => {
   // ];
   var matrix = gernerateMatrix(state.board);
   matrix = addblocks(matrix, state);
-
+  console.log(JSON.stringify(matrix))
   var grid = new PF.Grid(matrix);
   var finder = new PF.AStarFinder();
   console.log(
@@ -76,7 +76,7 @@ function addItself(matrix, state) {
 function turnZeroToOne(matrix, xy) {
   const x = xy.x;
   const y = xy.y;
-  matrix[x][y] = 1;
+  matrix[y][x] = 1;
 }
 
 function addOtherSnake(matrix, state) {

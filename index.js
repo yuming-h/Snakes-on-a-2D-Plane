@@ -120,7 +120,7 @@ const findMoveFoodMode = state => {
       return translateMove(state.you, pathList[0]);
     }
   }
-  //Otherwise chill (defensive mode) TODO
+  //Otherwise chill (defensive mode)
 };
 
 /**
