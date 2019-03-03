@@ -66,9 +66,6 @@ function addblocks(matrix, state) {
 //add the snake itself other than the head
 function addItself(matrix, state) {
   var bodySnake = state.you.body;
-  if(bodySnake.length > 1) {
-    bodySnake.shift();
-  }
   //console.log(bodySnake);
   bodySnake.forEach(xy => {
     turnZeroToOne(matrix, xy);
