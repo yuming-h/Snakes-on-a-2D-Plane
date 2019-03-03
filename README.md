@@ -1,4 +1,6 @@
 # Description
+Thanks to [BattleSnake](https://battlesnake.io) for the amazing competition and online platform!
+
 A simple snake made during the battleSnake competition in Victoria 2019 that only looks at *single* gamestates.  The snake can pathfind and move to food but doesn't handle cases where
 * There is no food on the board
 * There is no current viable path to food
@@ -11,7 +13,7 @@ It is quite incomplete and you can feel free to fork and add:
 * Defending patterns
 * Predicted game state consideration
 
-# starter-snake-node(js)
+# Getting Started
 
 A simple [Battlesnake AI](https://battlesnake.io) written in Javascript for NodeJS.
 
