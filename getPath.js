@@ -7,22 +7,10 @@ var PF = require("pathfinding");
  * @param {x:n, y:m} destination The desired destination
  */
 const getPath = (state, snake, destination) => {
-  // var matrix = [
-  //   [1, 1, 1, 1, 1],
-  //   [1, 1, 1, 1, 1],
-  //   [1, 1, 1, 1, 1],
-  //   [1, 1, 1, 1, 1]
-  // ];
   var matrix = gernerateMatrix(state.board);
   matrix = addblocks(matrix, state);
-  console.log(JSON.stringify(matrix))
   var grid = new PF.Grid(matrix);
   var finder = new PF.AStarFinder();
-  console.log(
-    `snake is ${JSON.stringify(snake)} and destination is ${JSON.stringify(
-      destination
-    )}`
-  );
   var path =
     snake.body.length > 0
       ? finder.findPath(
@@ -35,8 +23,6 @@ const getPath = (state, snake, destination) => {
       : [];
 
   path.shift();
-  //console.log(path);
-  //const matrix = gernerateMatrix(state.body.board);
 
   return path;
 };
@@ -55,7 +41,6 @@ function gernerateMatrix(board) {
 // returns a matrix with other snakes as walls
 function addblocks(matrix, state) {
   const matrixAllSnakes = addOtherSnake(matrix, state);
-  //console.log("afterother");
   return matrixAllSnakes;
 }
 
