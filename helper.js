@@ -9,6 +9,28 @@ const coordinateToObject = arrayCoord => {
   }
 }
 
+/**
+ * Given our snake and a path to take return the first move to take (this move)
+ * @param {*} ourSnake
+ * @param {*} path
+ */
+const translateMove = (ourSnake, path) => {
+  const ourHead = ourSnake.body.shift();
+  const coordinateToMoveTo = path.shift();
+  if (ourHead.x !== coordinateToMoveTo[0]) {
+    if (coordinateToMoveTo[0] > ourHead.x) {
+      return "right";
+    }
+    return "left";
+  } else {
+    if (coordinateToMoveTo[1] > ourHead.y) {
+      return "down";
+    }
+    return "up";
+  }
+};
+
 module.exports = {
-  coordinateToObject
+  coordinateToObject,
+  translateMove
 }

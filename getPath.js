@@ -54,23 +54,9 @@ function gernerateMatrix(board) {
 
 // returns a matrix with other snakes as walls
 function addblocks(matrix, state) {
-  //add the body of itself as block
-  //console.log("beforeiteself");
-  var matrixAfterItself = addItself(matrix, state);
-  //console.log("beforeother");
-  var matrixAfterOtherSanke = addOtherSnake(matrixAfterItself, state);
+  const matrixAllSnakes = addOtherSnake(matrix, state);
   //console.log("afterother");
-  return matrixAfterOtherSanke;
-}
-
-//add the snake itself other than the head
-function addItself(matrix, state) {
-  var bodySnake = state.you.body;
-  //console.log(bodySnake);
-  bodySnake.forEach(xy => {
-    turnZeroToOne(matrix, xy);
-  });
-  return matrix;
+  return matrixAllSnakes;
 }
 
 function turnZeroToOne(matrix, xy) {
@@ -83,6 +69,7 @@ function addOtherSnake(matrix, state) {
   var snakes = state.board.snakes;
   snakes.forEach(snake => {
     var snakeBody = snake.body;
+    snakeBody.pop()
     snakeBody.forEach(xy => {
       turnZeroToOne(matrix, xy);
     });
@@ -91,10 +78,5 @@ function addOtherSnake(matrix, state) {
 }
 
 module.exports = {
-  getPath,
-  gernerateMatrix,
-  turnZeroToOne,
-  addItself,
-  addblocks,
-  addOtherSnake
-};
+  getPath
+}
