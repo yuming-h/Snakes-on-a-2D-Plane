@@ -10,8 +10,6 @@ const {
   genericErrorHandler,
   poweredByHandler
 } = require('./handlers.js')
-var board = require('./board')
-
 
 const STARVING = 25;
 // For deployment to Heroku, the port needs to be set using ENV, so
@@ -29,14 +27,12 @@ app.use(poweredByHandler);
 // Handle POST request to '/start'
 app.post("/start", (request, response) => {
   try {
-  board = new board(request.body)
   // Response data
   const data = {
     color: "#DFFF00",
     headType: "smile",
     tailType: "bolt"
-  };
-  console.log(board.boardMatrix.toString())
+  }
   return response.json(data)
 } catch (e) {
   return response.json({error: e.toString()})
@@ -85,7 +81,7 @@ const translateMove = (ourSnake, path) => {
 };
 
 /**
- * The master function to return a move.
+ * Tries to find a path to food.
  * @param {*} state
  */
 const findMoveFoodMode = state => {
@@ -120,7 +116,6 @@ const findMoveFoodMode = state => {
       return translateMove(state.you, pathList[0]);
     }
   }
-  //Otherwise chill (defensive mode)
 };
 
 /**
